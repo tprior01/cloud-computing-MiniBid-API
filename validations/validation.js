@@ -2,7 +2,7 @@ const joi = require('joi')
 
 const registerValidation = (data) => {
     const schemaValidation = joi.object({
-        username:   joi.string().required().min(3).max(256),
+        username:   joi.string().required().min(3).max(256).alphanum(),
         email:      joi.string().required().min(6).max(256).email(),
         password:   joi.string().required().min(6).max(1024)
     })
@@ -22,7 +22,7 @@ const itemValidation = (data) => {
         title:          joi.string().required().min(1).max(256),
         description:    joi.string().required().min(1).max(1024),
         condition:      joi.string().required().valid('New', 'Used'),
-        auction_date:   joi.date().required().greater('now').iso()
+        expiresAt:      joi.date().required().greater('now').iso()
     })
     return schemaValidation.validate(data)
 }
@@ -33,7 +33,6 @@ const bidValidation = (data) => {
     })
     return schemaValidation.validate(data)
 }
-
 
 module.exports.registerValidation = registerValidation
 module.exports.loginValidation = loginValidation

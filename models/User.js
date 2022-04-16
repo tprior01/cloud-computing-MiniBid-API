@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username:{
         type:String,
         require:true,
@@ -11,17 +11,29 @@ const userSchema = mongoose.Schema({
         type:String,
         require:true,
         min:6,
-        max:256
+        max:256,
+        set: s => s.toLowerCase()
     },
     password:{
         type:String,
         require:true,
         min:6,
-        max:1024
+        max:1024        
     },
-    registration_date:{
-        type:Date,
-        default:Date.now
-    }
-})
-module.exports=mongoose.model('users',userSchema)
+    itemsWon:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Item',
+        default:[],
+        require:true
+    }],
+    itemsSold:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Item',
+        default:[],
+        require:true
+    }],
+},
+{ virtuals: true ,versionKey: false, id: false, timestamps: { createdAt: true, updatedAt: false } })
+
+const User = mongoose.model('User',userSchema, 'users')
+module.exports = { User };

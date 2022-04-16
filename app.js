@@ -1,24 +1,21 @@
 const express = require('express')
 const app = express()
-
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 require('dotenv/config')
-
 app.use(bodyParser.json())
 
-const itemsGetRoute = require('./routes/items.get')
-const itemsSellRoute = require('./routes/items.sell')
-const itemsBidRoute = require('./routes/items.bid')
-const authRoute = require('./routes/user.auth')
-const accountRoute = require('./routes/user.account')
+const getRoute = require('./routes/itm.get')
+const sellRoute = require('./routes/itm.sell')
+const bidRoute = require('./routes/itm.bid')
+const authRoute = require('./routes/usr.auth')
+const accountRoute = require('./routes/usr.account')
 
-app.use('/api/items',itemsGetRoute)
-app.use('/api/items',itemsSellRoute)
-app.use('/api/items',itemsBidRoute)
-app.use('/api/user',authRoute)
-app.use('/api/user',accountRoute)
-
+app.use('/api/itm',getRoute)
+app.use('/api/itm',sellRoute)
+app.use('/api/itm',bidRoute)
+app.use('/api/usr',authRoute)
+app.use('/api/usr',accountRoute)
 
 mongoose.connect(process.env.DB_CONNECTOR, ()=>{
     console.log('DB is connected')

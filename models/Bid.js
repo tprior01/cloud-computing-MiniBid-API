@@ -1,30 +1,30 @@
 const mongoose = require('mongoose')
 
-
-function formatPrice(price) {
-    return "£" + (price/100).toFixed(2)
-}
-
-const bidSchema = mongoose.Schema({
+const bidSchema = new mongoose.Schema({
     price:{
         type:Number,
         require:true,
-        get: formatPrice
+        min:1
     },
-    _id:{
-        type:String,
+    item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item',
         require:true
-    },
-    owner:{
-        type:String,
-        require:true
-    },
-    bid_date:{
-        type:Date,
-        default:Date.now
-    }},
-    {
-        toJSON : {getters: true}
-})
 
-module.exports = mongoose.model('bid', bidSchema)
+    },
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        require:true
+
+    }
+},
+{ virtuals:true, versionKey: false, id: false, timestamps: { createdAt: true, updatedAt: false }})
+
+bidSchema.virtual('priceString').get(function () { 
+    return "£" + (this.price/100).toFixed(2)
+});
+
+bidSchema.set('toJSON', { getters: true })
+const Bid = mongoose.model('Bid', bidSchema, 'bids');
+module.exports = { Bid };
